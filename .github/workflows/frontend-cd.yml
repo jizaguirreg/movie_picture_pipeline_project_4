@@ -21,6 +21,13 @@ jobs:
         cache: 'npm'
         cache-dependency-path: starter/frontend/package-lock.json
 
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
     - name: Install Dependencies
       working-directory: starter/frontend
       run: npm ci
@@ -41,6 +48,13 @@ jobs:
         node-version: 20
         cache: 'npm'
         cache-dependency-path: starter/frontend/package-lock.json
+
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         
     - name: Install Dependencies
       working-directory: starter/frontend
@@ -81,8 +95,8 @@ jobs:
         IMAGE_TAG: latest
         REPO_NAME: frontend
       run: |
-        docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag 110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG .
-        docker push 110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+        docker build --build-arg=REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL --tag $ECR_FRONTEND/$REPO_NAME:$IMAGE_TAG .
+        docker push $ECR_FRONTEND/$REPO_NAME:$IMAGE_TAG
 
     - name: Configure Kubeconfig
       run:
@@ -95,5 +109,5 @@ jobs:
         REPO_NAME: frontend
       run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
-          kustomize edit set image frontend=110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+          kustomize edit set image frontend=$ECR_FRONTEND/$REPO_NAME:$IMAGE_TAG
           kustomize build . | kubectl apply -f - --validate=false

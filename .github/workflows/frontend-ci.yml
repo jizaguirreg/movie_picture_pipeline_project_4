@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - name: Check the Repository
       uses: actions/checkout@v4
 
@@ -20,6 +21,13 @@ jobs:
         node-version: 20
         cache: 'npm'
         cache-dependency-path: starter/frontend/package-lock.json
+
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install Dependencies
       working-directory: starter/frontend
@@ -42,6 +50,13 @@ jobs:
         cache: 'npm'
         cache-dependency-path: starter/frontend/package-lock.json
 
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
     - name: Install Dependencies
       working-directory: starter/frontend
       run: npm ci
@@ -63,6 +78,20 @@ jobs:
         node-version: 20
         cache: 'npm'
         cache-dependency-path: starter/frontend/package-lock.json
+
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install Dependencies
+      working-directory: starter/frontend
+      run: npm ci
+
+    - name: Checkout Run Lint
+      run: cd starter/frontend && npm run test
 
     - name: Build and Run Docker Image
       run: |
