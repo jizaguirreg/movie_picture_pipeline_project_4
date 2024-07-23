@@ -77,8 +77,8 @@ jobs:
         REPO_NAME: backend
 
       run: |
-        docker build --tag 110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG .
-        docker push 110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+        docker build --tag 662318686675.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG .
+        docker push 662318686675.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
 
     - name: Update Kubeconfig
       run:
@@ -91,5 +91,5 @@ jobs:
         REPO_NAME: backend
       run: |
         aws eks update-kubeconfig --name cluster --region us-east-1
-        kustomize edit set image backend=110936467291.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+        kustomize edit set image backend=662318686675.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
         kustomize build . | kubectl apply -f - --validate=false
