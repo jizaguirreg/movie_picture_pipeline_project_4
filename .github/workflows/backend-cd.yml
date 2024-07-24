@@ -93,4 +93,4 @@ jobs:
         aws eks update-kubeconfig --name cluster --region us-east-1
         kustomize edit set image backend=662318686675.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:${GITHUB_SHA::7}
         kustomize build . | kubectl apply -f - --validate=false
-#test
+
